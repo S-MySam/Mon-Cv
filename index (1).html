@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CV — Camille Martin</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<style>
+  body { margin: 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const { useState } = React;
+
+const annotations = {
+  header: {
+    title: "🎨 Design & Posture — En-tête",
+    tips: [
+      "La photo n'est pas obligatoire, c'est un choix personnel. Si tu en mets une : fond neutre, tenue adaptée au secteur, format carré ou rond (jamais rectangulaire).",
+      "Le titre de poste doit correspondre exactement à l'offre ciblée. Pas de titre générique comme \"Étudiante motivée\".",
+      "Le titre du poste recherché passe AVANT le nom, en plus gros : c'est la première chose que le recruteur doit identifier.",
+      "Nom en taille moyenne, en dessous du titre de poste. Joue sur la typographie (poids, opacité) pour créer une hiérarchie visuelle claire.",
+      "Couleur de fond d'en-tête : utilise ta couleur principale (ex: bleu marine, terracotta, vert forêt). Texte en blanc pour le contraste.",
+    ],
+  },
+  contact: {
+    title: "🔒 Design & Posture — Contact",
+    tips: [
+      "Ne jamais mettre l'adresse complète (numéro + rue). Ville + code postal suffit pour préserver ta vie privée.",
+      "L'email doit être professionnel : prénom.nom@gmail.com. Pas de pseudo fantaisiste.",
+      "Les icônes (📍📧📞🔗) améliorent la lisibilité et aèrent visuellement la colonne.",
+      "LinkedIn : mets l'URL personnalisée (linkedin.com/in/ton-nom), pas l'URL générique à rallonge.",
+    ],
+  },
+  profil: {
+    title: "✍️ Design & Posture — Accroche",
+    tips: [
+      "3 à 4 lignes maximum. Au-delà, le recruteur décroche. Chaque mot doit être utile.",
+      "Structure conseillée : Qui tu es → Ce que tu apportes → Ce que tu cherches.",
+      "Pas de clichés : une phrase comme \"personne dynamique et rigoureuse\" ne dit rien sur toi, sois spécifique.",
+      "Personnalise l'accroche pour chaque offre. C'est le bloc le plus important à adapter à chaque candidature.",
+    ],
+  },
+  competences: {
+    title: "📊 Design & Posture — Compétences & Langues",
+    tips: [
+      "❌ INTERDIT : les barres de niveau (ex: ██████░░ 75%). Elles sont subjectives, non vérifiables et font perdre de la crédibilité.",
+      "✅ À la place : utilise des catégories textuelles claires (Ex: Anglais — Courant B2 / Espagnol — Notions).",
+      "Regroupe les compétences par thème : Outils digitaux / Compétences métier / Soft skills.",
+      "Maximum 6–8 compétences clés. Mieux vaut en avoir peu et les justifier en entretien.",
+    ],
+  },
+  experiences: {
+    title: "💼 Design & Posture — Expériences",
+    tips: [
+      "Format conseillé : Titre du poste (gras) + Entreprise + Dates + Lieu sur une ligne.",
+      "Modèle C.A.R. (Challenge — Action — Résultat) : quel était le problème ? quelle action as-tu menée ? quel résultat as-tu obtenu ?",
+      "Chaque bullet commence par un verbe d'action fort (Développé, Piloté, Créé, Optimisé…) et suit la logique C.A.R. en une phrase.",
+      "Inclure au moins une réalisation chiffrée par poste si possible (ex: +20% de taux de réponse).",
+      "Aère les blocs : une ligne vide entre chaque expérience.",
+      "Ordre antéchronologique : la plus récente en premier.",
+    ],
+  },
+  formation: {
+    title: "🎓 Design & Posture — Formation",
+    tips: [
+      "Même format visuel que les expériences pour la cohérence graphique.",
+      "Pour les alternants : mets toujours le double intitulé (École + Entreprise d'accueil).",
+      "Si tu as rédigé un mémoire, ajoute une ligne dédiée : \"Mémoire — Nom du mémoire\". Cela valorise ton travail de recherche et donne un sujet de conversation en entretien.",
+      "Mentionne 2–3 compétences clés acquises ou projets phares si la formation est récente.",
+      "Si tu as un bon GPA ou une mention, indique-le. Sinon, abstiens-toi.",
+    ],
+  },
+  interets: {
+    title: "🎯 Design & Posture — Centres d'intérêt",
+    tips: [
+      "Cette section peut être un brise-glace en entretien. Choisis des hobbies qui révèlent une facette de ta personnalité.",
+      "2 à 3 entrées maximum. Qualité > Quantité.",
+      "Un intérêt générique (\"Musique, Voyages, Cinéma\") n'apporte rien... sauf si tu le stylises selon ta personnalité. Ex: \"Voyages (Chine, Japon = passion pour la culture nippone)\" raconte une histoire.",
+      "Contextualise : \"Photographie argentique — exposition collective organisée en 2024\" capte davantage l'attention.",
+    ],
+  },
+};
+
+const AnnotationPanel = ({ section, visible, onClose }) => {
+  const data = annotations[section];
+  if (!data || !visible) return null;
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        right: 0,
+        width: "360px",
+        height: "100vh",
+        background: "#0f172a",
+        color: "#e2e8f0",
+        padding: "32px 24px",
+        overflowY: "auto",
+        zIndex: 1000,
+        boxShadow: "-8px 0 40px rgba(0,0,0,0.4)",
+        fontFamily: "'DM Sans', sans-serif",
+      }}
+    >
+      <button
+        onClick={onClose}
+        style={{
+          background: "none",
+          border: "1px solid #334155",
+          color: "#94a3b8",
+          padding: "6px 12px",
+          borderRadius: "6px",
+          cursor: "pointer",
+          marginBottom: "20px",
+          fontSize: "13px",
+        }}
+      >
+        ← Fermer
+      </button>
+      <h3
+        style={{
+          fontSize: "15px",
+          fontWeight: "700",
+          color: "#f59e0b",
+          marginBottom: "20px",
+          lineHeight: 1.4,
+          letterSpacing: "0.01em",
+        }}
+      >
+        {data.title}
+      </h3>
+      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+        {data.tips.map((tip, i) => (
+          <div
+            key={i}
+            style={{
+              background: "#1e293b",
+              borderLeft: "3px solid #f59e0b",
+              padding: "12px 14px",
+              borderRadius: "0 8px 8px 0",
+              fontSize: "13.5px",
+              lineHeight: "1.65",
+              color: "#cbd5e1",
+            }}
+          >
+            {tip}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const SectionLabel = ({ label, section, onClick }) => (
+  <button
+    onClick={() => onClick(section)}
+    title="Voir les conseils design"
+    style={{
+      background: "#f59e0b",
+      color: "#0f172a",
+      border: "none",
+      borderRadius: "4px",
+      padding: "2px 8px",
+      fontSize: "10px",
+      fontWeight: "800",
+      cursor: "pointer",
+      letterSpacing: "0.08em",
+      textTransform: "uppercase",
+      marginBottom: "8px",
+      display: "inline-block",
+      transition: "background 0.15s",
+    }}
+  >
+    {label} → Annotations
+  </button>
+);
+
+function CVTemplate() {
+  const [activeSection, setActiveSection] = useState(null);
+
+  const openSection = (section) => {
+    setActiveSection(section === activeSection ? null : section);
+  };
+
+  const accent = "#1e3a5f";
+  const accentLight = "#2563eb";
+  const sidebarBg = "#f0f4f8";
+  const textMain = "#1a202c";
+  const textMuted = "#64748b";
+
+  return (
+    <div
+      style={{
+        fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
+        background: "#e8edf2",
+        minHeight: "100vh",
+        padding: "32px 16px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      {/* Intro Banner */}
+      <div
+        style={{
+          maxWidth: "900px",
+          width: "100%",
+          background: "#0f172a",
+          color: "#e2e8f0",
+          borderRadius: "12px",
+          padding: "20px 28px",
+          marginBottom: "28px",
+          fontSize: "13.5px",
+          lineHeight: 1.7,
+        }}
+      >
+        <span style={{ color: "#f59e0b", fontWeight: "700" }}>
+          📋 Mode d'emploi :{" "}
+        </span>
+        Clique sur les boutons{" "}
+        <span
+          style={{
+            background: "#f59e0b",
+            color: "#0f172a",
+            padding: "1px 6px",
+            borderRadius: "3px",
+            fontWeight: "800",
+            fontSize: "11px",
+          }}
+        >
+          Annotations
+        </span>{" "}
+        sur chaque section pour afficher les conseils de Design & Posture dans
+        le panneau latéral.
+      </div>
+
+      {/* CV Container */}
+      <div
+        style={{
+          maxWidth: "900px",
+          width: "100%",
+          background: "#fff",
+          borderRadius: "12px",
+          overflow: "hidden",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+        }}
+      >
+        {/* HEADER */}
+        <div
+          style={{
+            background: accent,
+            color: "#fff",
+            padding: "36px 40px",
+            display: "flex",
+            alignItems: "center",
+            gap: "28px",
+          }}
+        >
+          {/* Photo placeholder (optionnelle) */}
+          <div
+            style={{
+              width: "90px",
+              height: "90px",
+              borderRadius: "50%",
+              background: "rgba(255,255,255,0.15)",
+              border: "3px dashed rgba(255,255,255,0.4)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+              fontSize: "28px",
+              gap: "2px",
+            }}
+          >
+            <span>👤</span>
+            <span style={{ fontSize: "8px", letterSpacing: "0.05em", opacity: 0.7 }}>
+              optionnel
+            </span>
+          </div>
+
+          <div style={{ flex: 1 }}>
+            <SectionLabel
+              label="En-tête"
+              section="header"
+              onClick={openSection}
+            />
+            <div
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "26px",
+                fontWeight: "700",
+                letterSpacing: "0.01em",
+                lineHeight: 1.15,
+                marginBottom: "8px",
+              }}
+            >
+              Chargée de Recrutement — Alternance M1
+            </div>
+            <div
+              style={{
+                fontSize: "13px",
+                fontWeight: "400",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "#93c5fd",
+              }}
+            >
+              Camille MARTIN
+            </div>
+          </div>
+        </div>
+
+        {/* PROFIL — full width below header */}
+        <div style={{ padding: "28px 40px 0 40px" }}>
+          <SectionLabel
+            label="Accroche"
+            section="profil"
+            onClick={openSection}
+          />
+          <h4
+            style={{
+              fontSize: "11px",
+              fontWeight: "700",
+              color: accentLight,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              marginBottom: "10px",
+            }}
+          >
+            Profil
+          </h4>
+          <div
+            style={{
+              background: "#f0f4ff",
+              borderLeft: `4px solid ${accent}`,
+              padding: "14px 16px",
+              borderRadius: "0 8px 8px 0",
+              fontSize: "13px",
+              lineHeight: 1.75,
+              color: textMain,
+            }}
+          >
+            Étudiante en Master Ressources Humaines, je construis mon expertise en recrutement au sein d'un environnement industriel exigeant. Rigoureuse et orientée résultats, je maîtrise les outils ATS et les techniques de sourcing multicanal. Je recherche une alternance où je pourrai contribuer activement à l'attraction des talents tout en développant une vision stratégique du recrutement.
+          </div>
+        </div>
+
+        {/* TWO COLUMNS */}
+        <div style={{ display: "flex", minHeight: "800px" }}>
+          {/* LEFT SIDEBAR */}
+          <div
+            style={{
+              width: "270px",
+              flexShrink: 0,
+              background: sidebarBg,
+              padding: "32px 24px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "28px",
+            }}
+          >
+            {/* CONTACT */}
+            <div>
+              <SectionLabel
+                label="Contact"
+                section="contact"
+                onClick={openSection}
+              />
+              <h4
+                style={{
+                  fontSize: "11px",
+                  fontWeight: "700",
+                  color: accentLight,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  marginBottom: "12px",
+                }}
+              >
+                Contact
+              </h4>
+              {[
+                { icon: "📍", text: "Lyon, 69001" },
+                { icon: "📧", text: "camille.martin@email.com" },
+                { icon: "📞", text: "06 XX XX XX XX" },
+                { icon: "🔗", text: "linkedin.com/in/camille-martin" },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "8px",
+                    marginBottom: "8px",
+                    fontSize: "12.5px",
+                    color: textMain,
+                    lineHeight: 1.5,
+                  }}
+                >
+                  <span style={{ flexShrink: 0 }}>{item.icon}</span>
+                  <span style={{ wordBreak: "break-all" }}>{item.text}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* COMPETENCES */}
+            <div>
+              <SectionLabel
+                label="Compétences"
+                section="competences"
+                onClick={openSection}
+              />
+              <h4
+                style={{
+                  fontSize: "11px",
+                  fontWeight: "700",
+                  color: accentLight,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  marginBottom: "12px",
+                }}
+              >
+                Compétences
+              </h4>
+
+              {[
+                {
+                  cat: "Recrutement & RH",
+                  items: ["Sourcing & qualification", "ATS (Workday, Taleo)", "Conduite d'entretiens"],
+                },
+                {
+                  cat: "Outils & Digital",
+                  items: ["LinkedIn Recruiter", "Pack Office", "Notion, Canva"],
+                },
+                {
+                  cat: "Soft Skills",
+                  items: ["Écoute active", "Rigueur organisationnelle", "Sens du relationnel"],
+                },
+              ].map((group, i) => (
+                <div key={i} style={{ marginBottom: "14px" }}>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: "700",
+                      color: textMuted,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
+                      marginBottom: "6px",
+                    }}
+                  >
+                    {group.cat}
+                  </div>
+                  {group.items.map((item, j) => (
+                    <div
+                      key={j}
+                      style={{
+                        fontSize: "12.5px",
+                        color: textMain,
+                        padding: "3px 0 3px 10px",
+                        borderLeft: "2px solid #93c5fd",
+                        marginBottom: "4px",
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              ))}
+
+              {/* LANGUES */}
+              <div style={{ marginTop: "8px" }}>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    fontWeight: "700",
+                    color: textMuted,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    marginBottom: "8px",
+                  }}
+                >
+                  Langues
+                </div>
+                {[
+                  { lang: "Français", level: "Langue maternelle" },
+                  { lang: "Anglais", level: "Courant — C1" },
+                  { lang: "Espagnol", level: "Intermédiaire — B1" },
+                ].map((l, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      fontSize: "12.5px",
+                      marginBottom: "5px",
+                      color: textMain,
+                    }}
+                  >
+                    <span style={{ fontWeight: "600" }}>{l.lang}</span>
+                    <span style={{ color: textMuted, fontSize: "11.5px" }}>
+                      {l.level}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* INTERETS */}
+            <div>
+              <SectionLabel
+                label="Centres d'intérêt"
+                section="interets"
+                onClick={openSection}
+              />
+              <h4
+                style={{
+                  fontSize: "11px",
+                  fontWeight: "700",
+                  color: accentLight,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  marginBottom: "12px",
+                }}
+              >
+                Centres d'intérêt
+              </h4>
+              {[
+                {
+                  icon: "📸",
+                  title: "Photographie argentique",
+                  detail: "Expo collective organisée à Lyon, 2024",
+                },
+                {
+                  icon: "✈️",
+                  title: "Voyages (Chine, Japon)",
+                  detail: "= passion pour la culture nippone et l'apprentissage du japonais",
+                },
+                {
+                  icon: "🧗",
+                  title: "Escalade",
+                  detail: "Pratique en club depuis 3 ans — niveau 6B",
+                },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  style={{
+                    marginBottom: "12px",
+                    paddingLeft: "10px",
+                    borderLeft: "2px solid #93c5fd",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "12.5px",
+                      fontWeight: "700",
+                      color: textMain,
+                    }}
+                  >
+                    {item.icon} {item.title}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "11.5px",
+                      color: textMuted,
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {item.detail}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT MAIN */}
+          <div
+            style={{
+              flex: 1,
+              padding: "32px 36px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "28px",
+            }}
+          >
+            {/* EXPERIENCES */}
+            <div>
+              <SectionLabel
+                label="Expériences"
+                section="experiences"
+                onClick={openSection}
+              />
+              <h4
+                style={{
+                  fontSize: "11px",
+                  fontWeight: "700",
+                  color: accentLight,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  marginBottom: "16px",
+                }}
+              >
+                Expériences Professionnelles
+              </h4>
+
+              {[
+                {
+                  title: "Chargée de Recrutement — Alternante",
+                  company: "Groupe Industria",
+                  date: "Sept. 2024 – Présent",
+                  location: "Lyon",
+                  bullets: [
+                    "Challenge : 15 offres ouvertes simultanément avec un délai de traitement jugé trop long → Action : conception d'un tableau de bord de suivi automatisé sur Workday → Résultat : réduction de 30% du délai moyen de traitement des candidatures",
+                    "Challenge : manque de structuration des pré-qualifications → Action : conduit 60+ entretiens téléphoniques en 6 mois selon une grille standardisée → Résultat : amélioration de la cohérence des short-lists transmises aux managers",
+                    "Coordonné les jurys d'entretien avec 8 managers opérationnels sur l'ensemble du processus",
+                  ],
+                },
+                {
+                  title: "Assistante RH — Stage",
+                  company: "Cabinet Novalis RH",
+                  date: "Avr. – Juin 2024",
+                  location: "Paris (distanciel)",
+                  bullets: [
+                    "Challenge : absence de format standard pour les comptes-rendus d'entretien → Action : créé un modèle de rapport de candidature → Résultat : modèle adopté par l'ensemble de l'équipe pour tous les clients",
+                    "Participé au sourcing de 3 profils cadres via LinkedIn Recruiter et CVthèques",
+                  ],
+                },
+              ].map((exp, i) => (
+                <div
+                  key={i}
+                  style={{
+                    marginBottom: "22px",
+                    paddingBottom: "22px",
+                    borderBottom:
+                      i < 1 ? "1px solid #e2e8f0" : "none",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      marginBottom: "4px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontWeight: "700",
+                        fontSize: "14px",
+                        color: textMain,
+                      }}
+                    >
+                      {exp.title}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "11.5px",
+                        color: textMuted,
+                        whiteSpace: "nowrap",
+                        marginLeft: "12px",
+                      }}
+                    >
+                      {exp.date}
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "12.5px",
+                      color: accentLight,
+                      fontWeight: "600",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    {exp.company} · {exp.location}
+                  </div>
+                  <ul
+                    style={{
+                      paddingLeft: "16px",
+                      margin: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "5px",
+                    }}
+                  >
+                    {exp.bullets.map((b, j) => (
+                      <li
+                        key={j}
+                        style={{
+                          fontSize: "12.5px",
+                          color: "#374151",
+                          lineHeight: 1.55,
+                        }}
+                      >
+                        {b}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+
+            {/* FORMATION */}
+            <div>
+              <SectionLabel
+                label="Formation"
+                section="formation"
+                onClick={openSection}
+              />
+              <h4
+                style={{
+                  fontSize: "11px",
+                  fontWeight: "700",
+                  color: accentLight,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  marginBottom: "16px",
+                }}
+              >
+                Formation
+              </h4>
+
+              {[
+                {
+                  diploma: "Master 1 — Management des Ressources Humaines",
+                  school: "IGENSIA Education · Lyon",
+                  date: "2024 – 2026",
+                  detail: "Formation en alternance · Spécialisation Talent Acquisition & Marque Employeur",
+                  memoire: "Mémoire — L'hétérogénéité des pratiques managériales et son impact sur l'engagement des alternants",
+                },
+                {
+                  diploma: "Licence Pro — Gestion des Organisations",
+                  school: "Université Lumière Lyon 2",
+                  date: "2021 – 2024",
+                  detail: "Mention Bien",
+                  memoire: "Mémoire — L'impact du télétravail sur l'engagement des équipes",
+                },
+              ].map((f, i) => (
+                <div
+                  key={i}
+                  style={{
+                    marginBottom: "16px",
+                    paddingBottom: "16px",
+                    borderBottom: i < 1 ? "1px solid #e2e8f0" : "none",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    gap: "12px",
+                  }}
+                >
+                  <div style={{ flex: 1 }}>
+                    <div
+                      style={{
+                        fontWeight: "700",
+                        fontSize: "13.5px",
+                        color: textMain,
+                        marginBottom: "3px",
+                      }}
+                    >
+                      {f.diploma}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "12.5px",
+                        color: accentLight,
+                        fontWeight: "600",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      {f.school}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "12px",
+                        color: textMuted,
+                        lineHeight: 1.5,
+                        marginBottom: "4px",
+                      }}
+                    >
+                      {f.detail}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "11.5px",
+                        color: "#475569",
+                        lineHeight: 1.5,
+                        fontStyle: "italic",
+                      }}
+                    >
+                      {f.memoire}
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "11.5px",
+                      color: textMuted,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {f.date}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Annotation Panel */}
+      <AnnotationPanel
+        section={activeSection}
+        visible={!!activeSection}
+        onClose={() => setActiveSection(null)}
+      />
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<CVTemplate />);
+
+</script>
+</body>
+</html>
