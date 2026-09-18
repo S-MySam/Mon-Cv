@@ -54,7 +54,30 @@
     <div class="shell spread">
       <p class="eyebrow">Écrire à My Sam</p>
       <div class="contact-grid">
-        <form class="form reveal" data-contact-form novalidate>
+        <noscript>
+          <div class="direct">
+            <h2 class="h2">Écrivez-nous.</h2>
+            <p class="lede">Quelques lignes sur votre situation suffisent&nbsp;: où vous en êtes, ce que vous cherchez.</p>
+            <p class="direct__actions">
+              <a class="btn" href="mailto:mysam.officiel@gmail.com">mysam.officiel@gmail.com</a>
+              <a class="action" href="tel:0669255304">ou appeler le 06 69 25 53 04</a>
+            </p>
+          </div>
+        </noscript>
+
+        <div class="direct reveal" data-contact-fallback hidden>
+          <h2 class="h2">Écrivez-nous.</h2>
+          <p class="lede">Quelques lignes sur votre situation suffisent&nbsp;: où vous en êtes, ce que vous cherchez.</p>
+          <p class="direct__actions">
+            <a class="btn" data-direct="email" href="#" data-no-transition="true">
+              <span>Écrire un e-mail</span>
+              <svg class="arw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" style="width:1.05em;height:1.05em;"><path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="action" data-direct="phone" href="#" data-no-transition="true"></a>
+          </p>
+        </div>
+
+        <form class="form reveal" data-contact-form novalidate hidden>
           <div class="field">
             <label for="f-profil">Vous êtes</label>
             <select id="f-profil" name="profil" data-prefill-profile>
@@ -95,7 +118,7 @@
             <dt>LinkedIn</dt>
             <dd data-coord="linkedin"></dd>
           </div>
-          <div>
+          <div data-coord-notice>
             <span class="provisional">Coordonnées à compléter</span>
             <p class="note" style="margin-top:12px;">Renseignez-les une seule fois dans <code>assets/js/config.js</code>&nbsp;: elles s’affichent alors partout, et le formulaire s’active dès qu’un point de collecte est indiqué.</p>
           </div>

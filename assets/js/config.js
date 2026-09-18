@@ -7,9 +7,9 @@
 
 window.MY_SAM = {
   /* Coordonnées publiques — laissez "" si pas encore arrêtées */
-  email: "",          // ex. "contact@my-sam.fr"
-  phone: "",          // ex. "+33 6 00 00 00 00"
-  linkedin: "",       // ex. "https://www.linkedin.com/company/my-sam"
+  email: "mysam.officiel@gmail.com",
+  phone: "06 69 25 53 04",
+  linkedin: "",       // ex. "https://www.linkedin.com/company/my-sam" — pas encore renseigné
 
   /* Point de collecte du formulaire de contact.
      Exemples : "https://formspree.io/f/xxxxxxx" (Formspree)

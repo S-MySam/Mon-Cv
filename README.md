@@ -30,15 +30,28 @@ assets/
 
 Tout ce qui dépend d'informations réelles est regroupé dans **`assets/js/config.js`** :
 
-| Champ          | Effet quand il est vide                                   |
-|----------------|-----------------------------------------------------------|
-| `email`        | affiche « À compléter » sur la page contact                |
-| `phone`        | idem                                                        |
-| `linkedin`     | idem                                                        |
-| `formEndpoint` | le formulaire reste désactivé, avec un message explicite   |
+| Champ          | Effet quand il est vide                                          |
+|----------------|------------------------------------------------------------------|
+| `email`        | la ligne « E-mail » disparaît de la page contact                 |
+| `phone`        | la ligne « Téléphone » disparaît                                 |
+| `linkedin`     | la ligne « LinkedIn » disparaît                                  |
+| `formEndpoint` | le formulaire est remplacé par un bloc de contact direct         |
 
 Dès qu'une valeur est saisie, l'affichage correspondant s'active partout. Rien
-n'est inventé tant que le champ est vide : c'est volontaire.
+n'est inventé, et rien n'est affiché à moitié : une information absente est
+masquée plutôt que signalée au visiteur.
+
+### Activer le formulaire
+
+`formEndpoint` attend l'URL d'un service qui reçoit les envois — par exemple un
+formulaire [Formspree](https://formspree.io) (`https://formspree.io/f/xxxxxxx`).
+Tant qu'il est vide, la page contact affiche « Écrivez-nous » avec l'e-mail et
+le téléphone. Dès qu'il est renseigné, le formulaire prend sa place
+automatiquement : aucune autre modification n'est nécessaire.
+
+Le repli `<noscript>` de `contact.html` contient les coordonnées en clair, pour
+les visiteurs sans JavaScript. **Si l'e-mail ou le téléphone change, il faut le
+mettre à jour à deux endroits :** `assets/js/config.js` et ce bloc `<noscript>`.
 
 Les contenus encore provisoires portent une pastille **« Contenu provisoire »**
 dans la page. Cherchez `class="provisional"` pour les retrouver tous.

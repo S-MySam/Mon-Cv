@@ -112,7 +112,10 @@
     var key = node.dataset.coord;
     var value = (cfg[key] || "").trim();
     if (!value) {
-      node.innerHTML = '<span class="todo">À compléter</span>';
+      // Rien à montrer au visiteur : on masque la ligne entière plutôt que
+      // d'afficher une mention de chantier sur une page publique.
+      var row = node.closest("div") || node;
+      row.hidden = true;
       return;
     }
     var href = key === "email" ? "mailto:" + value
@@ -127,6 +130,13 @@
     node.replaceChildren(link);
   }
   document.querySelectorAll("[data-coord]").forEach(renderCoord);
+
+  // Le rappel « coordonnées à compléter » ne s'affiche que tant qu'aucun
+  // moyen de contact n'est renseigné.
+  var coordNotice = document.querySelector("[data-coord-notice]");
+  if (coordNotice && ((cfg.email || "").trim() || (cfg.phone || "").trim())) {
+    coordNotice.hidden = true;
+  }
 
   /* --- Pré-sélection du profil déjà choisi dans le parcours ----------- */
   var prefill = document.querySelector("[data-prefill-profile]");
@@ -148,23 +158,46 @@
     var submit = form.querySelector("button[type=submit]");
     var endpoint = (cfg.formEndpoint || "").trim();
 
+    var fallback = document.querySelector("[data-contact-fallback]");
+    var mail = (cfg.email || "").trim();
+    var tel = (cfg.phone || "").trim();
+
     if (!endpoint) {
+      // Un formulaire qui ne peut rien envoyer n'a pas sa place sur une page
+      // publique : on le retire et on propose le contact direct à la place.
+      if (fallback && (mail || tel)) {
+        form.hidden = true;
+        fallback.hidden = false;
+
+        var mailLink = fallback.querySelector('[data-direct="email"]');
+        if (mailLink) {
+          if (mail) { mailLink.href = "mailto:" + mail; }
+          else { mailLink.hidden = true; }
+        }
+        var telLink = fallback.querySelector('[data-direct="phone"]');
+        if (telLink) {
+          if (tel) {
+            telLink.href = "tel:" + tel.replace(/[^+\d]/g, "");
+            telLink.textContent = "ou appeler le " + tel;
+          } else {
+            telLink.hidden = true;
+          }
+        }
+        return;
+      }
+
       form.querySelectorAll("input, textarea, select, button").forEach(function (el) {
         el.disabled = true;
       });
       if (status) {
-        var mail = (cfg.email || "").trim();
-        if (mail) {
-          status.innerHTML = 'Le formulaire n’est pas encore relié à une boîte de réception. ' +
-            'En attendant, écrivez directement à <a href="mailto:' + mail +
-            '" data-no-transition="true" style="border-bottom:1px solid var(--hair-paper);">' + mail + '</a>.';
-        } else {
-          status.textContent = 'Le formulaire et les coordonnées s’activeront dès que l’adresse ' +
-            'de contact de My Sam sera renseignée dans assets/js/config.js.';
-        }
+        status.textContent = 'Le formulaire et les coordonnées s’activeront dès que l’adresse ' +
+          'de contact de My Sam sera renseignée dans assets/js/config.js.';
       }
       return;
     }
+
+    if (fallback) fallback.hidden = true;
+    form.hidden = false;
 
     form.setAttribute("action", endpoint);
     form.setAttribute("method", "POST");

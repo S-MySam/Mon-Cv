@@ -173,3 +173,17 @@
   background: var(--paper-2);
   border-radius: 3px;
 }
+
+/* --- Contact direct : affiché tant que le formulaire n'est pas relié ---- */
+.direct h2 { margin-bottom: clamp(14px, 1.8vw, 22px); }
+.direct .lede { margin-bottom: clamp(24px, 3vw, 34px); }
+.direct__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px clamp(20px, 3vw, 34px);
+}
+/* Sans JavaScript, les coordonnées ne sont pas injectées : on masque la liste
+   (le <noscript> de la page prend le relais) plutôt que d'afficher des
+   intitulés vides. */
+.no-js .coords { display: none; }
