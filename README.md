@@ -18,6 +18,8 @@ entreprises.html                  Conseil aux entreprises
 particuliers.html                 Accompagnement des personnes
 associations.html                 Structures d'accompagnement
 contact.html                      Contact — sert aussi d'aboutissement à « Autre »
+mentions-legales.html             Mentions légales (art. 6-III LCEN)
+confidentialite.html              Politique de confidentialité
 ressources/
   modele-cv-annote.html           Ressource : le CV commenté section par section
 assets/
@@ -56,8 +58,20 @@ mettre à jour à deux endroits :** `assets/js/config.js` et ce bloc `<noscript>
 Les contenus encore provisoires portent une pastille **« Contenu provisoire »**
 dans la page. Cherchez `class="provisional"` pour les retrouver tous.
 
-Restent à rédiger : les mentions légales et la politique de confidentialité
-(lien en pied de page, actuellement signalé comme à faire).
+### Pages légales — champs restants
+
+`mentions-legales.html` et `confidentialite.html` sont écrites et liées depuis
+le pied de page. Huit emplacements attendent des informations que seul
+l'éditeur possède ; ils sont visibles à l'écran sous la forme d'une pastille
+pointillée. Pour les retrouver : `grep -n 'todo-inline' *.html`.
+
+| Page                    | À renseigner                                                        |
+|-------------------------|---------------------------------------------------------------------|
+| `mentions-legales.html` | forme juridique, adresse professionnelle, SIREN/SIRET, immatriculation, TVA, capital, directeur de la publication |
+| `confidentialite.html`  | durée de conservation des échanges, responsable du traitement       |
+
+L'hébergeur y est déclaré comme GitHub, Inc. — à corriger si le site est
+déployé ailleurs.
 
 ## Direction artistique
 
