@@ -1,0 +1,283 @@
+/* =========================================================
+   MY SAM — La porte d'entrée
+   Un index éditorial, pas trois boutons colorés.
+   ========================================================= */
+
+.gateway {
+  --tone: var(--tone-neutre);
+  --mx: 50%;
+  --my: 40%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  padding: 0 var(--gutter) clamp(20px, 3vw, 34px);
+  background: var(--ink);
+  color: var(--on-ink);
+  overflow: hidden;
+}
+
+/* Halo : le fond réagit au profil survolé et suit le curseur.
+   Très basse opacité — on doit le sentir, pas le voir. */
+.gw__halo {
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(42vw 42vw at var(--mx) var(--my),
+      rgb(var(--tone) / .5), transparent 68%);
+  opacity: .62;
+  filter: blur(18px);
+  transition: opacity var(--t-slow) var(--ease), background-color var(--t-slow) var(--ease);
+}
+.gateway[data-tone="none"] .gw__halo { opacity: .26; }
+
+/* Grain : casse la platitude du noir sans image ni dégradé bon marché */
+.gw__grain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='.34'/></svg>");
+}
+
+.gateway > *:not(.gw__halo):not(.gw__grain) { position: relative; z-index: 2; }
+
+/* --- Bandeau supérieur ----------------------------------------------- */
+.gw__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--u);
+  padding-block: 18px;
+}
+.gw__top .wordmark { font-size: 1.32rem; }
+.gw__escape {
+  font-size: .82rem;
+  color: var(--on-ink-faint);
+  padding: .5em 0;
+  border-bottom: 1px solid transparent;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.gw__escape:hover { color: var(--on-ink); border-bottom-color: var(--hair-ink); }
+
+/* --- Composition : la question et l'index partagent l'écran ----------- */
+.gw__main {
+  flex: 1;
+  display: grid;
+  align-content: center;
+  gap: clamp(22px, 4vh, 48px);
+  grid-template-columns: minmax(0, 1fr);
+  padding-block: clamp(20px, 4vh, 56px);
+}
+@media (min-width: 1000px) {
+  .gw__main {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    gap: clamp(48px, 6vw, 120px);
+    align-items: center;
+  }
+}
+
+/* --- Question --------------------------------------------------------- */
+.gw__intro { max-width: 22ch; }
+.gw__intro .eyebrow { display: block; margin-bottom: clamp(14px, 2.4vh, 26px); }
+.gw__question { margin-bottom: .44em; font-size: clamp(2.5rem, 4.6vw, 4.6rem); }
+.gw__lede { max-width: 34ch; }
+
+/* --- L'index des profils ---------------------------------------------- */
+.gw__list { border-top: 1px solid var(--hair-ink); }
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr) 2.5rem;
+  align-items: center;
+  gap: clamp(10px, 2vw, 28px);
+  padding: clamp(16px, 2.4vw, 36px) 0;
+  border-bottom: 1px solid var(--hair-ink);
+  transition: opacity var(--t-mid) var(--ease);
+}
+
+/* Le filet du bas se recolore de gauche à droite au survol */
+.row::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 1px;
+  background: var(--accent-up);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--t-mid) var(--ease);
+}
+
+.row__index {
+  font-size: .78rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .12em;
+  color: var(--on-ink-faint);
+  transition: color var(--t-mid) var(--ease), transform var(--t-mid) var(--ease);
+}
+
+.row__title {
+  display: block;
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3.4vw, 3.4rem);
+  line-height: 1;
+  letter-spacing: -.02em;
+  transition: transform var(--t-mid) var(--ease);
+  transform-origin: left center;
+}
+
+.row__sub {
+  display: block;
+  margin-top: .5em;
+  font-size: clamp(.86rem, 1.05vw, .98rem);
+  line-height: 1.45;
+  color: var(--on-ink-soft);
+  max-width: 34ch;
+  transition: color var(--t-mid) var(--ease), transform var(--t-mid) var(--ease);
+}
+
+.row__arrow {
+  justify-self: end;
+  width: 1.6rem; height: 1.6rem;
+  color: var(--on-ink-faint);
+  opacity: 0;
+  transform: translateX(-14px);
+  transition: opacity var(--t-mid) var(--ease), transform var(--t-mid) var(--ease), color var(--t-mid) var(--ease);
+}
+
+/* Survol / focus : l'élément visé s'avance, les autres s'effacent */
+@media (hover: hover) and (pointer: fine) {
+  .gw__list:hover .row,
+  .gw__list:focus-within .row { opacity: .38; }
+  .gw__list .row:hover,
+  .gw__list .row:focus-visible { opacity: 1; }
+}
+.row:hover::after, .row:focus-visible::after { transform: scaleX(1); }
+.row:hover .row__index, .row:focus-visible .row__index { color: var(--accent-up); }
+.row:hover .row__title, .row:focus-visible .row__title { transform: translateX(clamp(8px, 1.4vw, 22px)); }
+.row:hover .row__sub, .row:focus-visible .row__sub {
+  color: var(--on-ink);
+  transform: translateX(clamp(8px, 1.4vw, 22px));
+}
+.row:hover .row__arrow, .row:focus-visible .row__arrow {
+  opacity: 1; transform: none; color: var(--accent-up);
+}
+
+/* --- Bas de page : l'option « Autre », volontairement discrète -------- */
+.gw__foot {
+  display: flex;
+  border-top: 1px solid transparent;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px var(--u);
+  padding-top: clamp(20px, 3.4vh, 38px);
+  margin-top: auto;
+}
+.gw__other {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .5em;
+  font-size: .92rem;
+  color: var(--on-ink-faint);
+  transition: color var(--t-fast) var(--ease);
+}
+.gw__other b {
+  font-weight: 400;
+  border-bottom: 1px solid var(--hair-ink);
+  padding-bottom: 2px;
+  transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.gw__other:hover { color: var(--on-ink-soft); }
+.gw__other:hover b { color: var(--accent-up); border-bottom-color: var(--accent-up); }
+
+.gw__hint {
+  font-size: .74rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--on-ink-faint);
+}
+.gw__hint kbd {
+  font: inherit;
+  border: 1px solid var(--hair-ink);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+@media (hover: none), (pointer: coarse), (max-width: 720px) { .gw__hint { display: none; } }
+
+/* Reprise du parcours précédent */
+.gw__resume {
+  display: none;
+  align-items: center;
+  gap: .6em;
+  font-size: .82rem;
+  color: var(--on-ink-faint);
+}
+.gw__resume[data-ready="true"] { display: inline-flex; }
+.gw__resume b { font-weight: 500; color: var(--accent-up); }
+
+/* --- Sortie : la ligne choisie part, le reste s'efface ---------------- */
+.js body.is-leaving .row:not(.is-chosen),
+.js body.is-leaving .gw__intro,
+.js body.is-leaving .gw__top,
+.js body.is-leaving .gw__foot {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity .3s var(--ease-in), transform .3s var(--ease-in);
+}
+.js body.is-leaving .row.is-chosen { opacity: 1; }
+.js body.is-leaving .row.is-chosen .row__title { transform: translateX(clamp(8px, 1.4vw, 22px)); }
+
+/* --- Entrée : la question se construit ligne à ligne ------------------ */
+.js .gw__intro > *, .js .row, .js .gw__foot > * {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: gw-rise .9s var(--ease) forwards;
+}
+.js .gw__intro > *:nth-child(1) { animation-delay: .05s; }
+.js .gw__intro > *:nth-child(2) { animation-delay: .12s; }
+.js .gw__intro > *:nth-child(3) { animation-delay: .19s; }
+.js .row:nth-child(1) { animation-delay: .26s; }
+.js .row:nth-child(2) { animation-delay: .33s; }
+.js .row:nth-child(3) { animation-delay: .40s; }
+.js .gw__foot > * { animation-delay: .5s; }
+
+@keyframes gw-rise { to { opacity: 1; transform: none; } }
+
+/* --- Mobile : on recompose, on ne rétrécit pas ------------------------ */
+@media (max-width: 720px) {
+  .gateway { padding-bottom: clamp(24px, 5vw, 40px); }
+  .gw__intro { max-width: 100%; }
+  .gw__lede { font-size: 1rem; }
+
+  .row {
+    grid-template-columns: 2.6rem minmax(0, 1fr);
+    align-items: start;
+    padding: 22px 0;
+    min-height: 104px;          /* zone tactile généreuse */
+    align-content: center;
+  }
+  .row__index { padding-top: .5em; }
+  .row__title { font-size: clamp(2.05rem, 10vw, 2.9rem); }
+  .row__sub { font-size: .9rem; max-width: 28ch; }
+  .row__arrow { display: none; }
+  /* Sur tactile, pas d'effet de survol : le filet accent est permanent */
+  .row::after { transform: scaleX(1); background: var(--hair-ink); }
+  .row:active { opacity: .6; }
+  .gw__foot { padding-top: 26px; }
+}
+
+@media (max-width: 380px) {
+  .row { grid-template-columns: minmax(0, 1fr); }
+  .row__index { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .gw__intro > *, .js .row, .js .gw__foot > * { opacity: 1; transform: none; animation: none; }
+  .gw__halo { display: none; }
+}

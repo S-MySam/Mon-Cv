@@ -1,0 +1,175 @@
+/* =========================================================
+   MY SAM — Pages d'univers (entreprises / particuliers /
+   associations / contact)
+   ========================================================= */
+
+/* --- En-tête de page --------------------------------------------------- */
+.hero {
+  position: relative;
+  background: var(--ink);
+  color: var(--on-ink);
+  padding-block: clamp(56px, 10vw, 128px) clamp(48px, 8vw, 104px);
+  overflow: hidden;
+}
+.hero__halo {
+  position: absolute;
+  inset: -30% -10% auto -10%;
+  height: 120%;
+  pointer-events: none;
+  background: radial-gradient(38vw 38vw at 78% 18%, rgb(var(--tone, var(--tone-neutre)) / .42), transparent 68%);
+  opacity: .45;
+  filter: blur(20px);
+}
+.hero > .shell { position: relative; z-index: 1; }
+
+.hero__index {
+  display: flex;
+  align-items: center;
+  gap: .9em;
+  margin-bottom: clamp(20px, 3vw, 36px);
+}
+.hero__index span { font-variant-numeric: tabular-nums; color: var(--accent-up); }
+.hero__index i {
+  flex: 1;
+  height: 1px;
+  background: var(--hair-ink);
+  max-width: 160px;
+}
+.hero h1 { margin-bottom: clamp(18px, 2.4vw, 30px); }
+.hero .lede { max-width: 48ch; }
+
+.hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 10px;
+  margin-top: clamp(26px, 4vw, 44px);
+}
+.tag {
+  padding: .5em 1em;
+  border: 1px solid var(--hair-ink);
+  border-radius: 999px;
+  font-size: .8rem;
+  color: var(--on-ink-soft);
+}
+
+/* --- Liste éditoriale des prestations ---------------------------------- */
+.offer { border-top: 1px solid var(--hair-paper); }
+
+.offer__item {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px clamp(24px, 4vw, 64px);
+  padding: clamp(24px, 3.2vw, 44px) 0;
+  border-bottom: 1px solid var(--hair-paper);
+  position: relative;
+}
+@media (min-width: 900px) {
+  .offer__item { grid-template-columns: 3.5rem minmax(0, 32%) minmax(0, 1fr); align-items: start; }
+}
+.offer__num {
+  font-size: .78rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .12em;
+  color: var(--on-paper-soft);
+  padding-top: .35em;
+}
+.offer__item h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.35rem, 2.2vw, 1.85rem); line-height: 1.1; letter-spacing: -.01em; }
+.offer__item p { color: var(--on-paper-soft); max-width: 58ch; }
+.offer__item::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--t-mid) var(--ease);
+}
+.offer__item:hover::before { transform: scaleX(1); }
+.offer__item:hover .offer__num { color: var(--accent); }
+
+/* --- Bloc ressource (contenu réel, pas un placeholder) ----------------- */
+.resource {
+  display: grid;
+  gap: clamp(20px, 3vw, 40px);
+  grid-template-columns: 1fr;
+  padding: clamp(26px, 3.4vw, 44px);
+  background: var(--paper);
+  border: 1px solid var(--hair-paper);
+}
+@media (min-width: 860px) { .resource { grid-template-columns: 1fr auto; align-items: center; } }
+.resource h3 { margin-bottom: .5em; }
+.resource p { color: var(--on-paper-soft); max-width: 52ch; font-size: .96rem; }
+
+/* --- Appel à l'action -------------------------------------------------- */
+.cta { text-align: left; }
+.cta h2 { margin-bottom: clamp(16px, 2vw, 24px); max-width: 18ch; }
+.cta .lede { margin-bottom: clamp(24px, 3vw, 36px); }
+.cta__actions { display: flex; flex-wrap: wrap; gap: 14px 20px; align-items: center; }
+
+/* --- Bascule d'univers en bas de page ---------------------------------- */
+.switch { display: grid; gap: 0; grid-template-columns: 1fr; }
+@media (min-width: 760px) { .switch { grid-template-columns: repeat(3, 1fr); } }
+.switch__link {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1em;
+  padding: clamp(20px, 2.6vw, 30px) 0;
+  border-top: 1px solid var(--hair-ink);
+  font-family: var(--serif);
+  font-size: clamp(1.3rem, 2.4vw, 1.75rem);
+  color: var(--on-ink-soft);
+  transition: color var(--t-fast) var(--ease), padding-left var(--t-mid) var(--ease);
+}
+@media (min-width: 760px) {
+  .switch__link { border-top: 0; border-bottom: 1px solid var(--hair-ink); padding-right: 24px; }
+}
+.switch__link:hover { color: var(--on-ink); padding-left: 10px; }
+.switch__link small { font-family: var(--sans); font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--on-ink-faint); }
+.switch__link[aria-current="page"] { color: var(--accent-up); }
+
+/* --- Formulaire de contact --------------------------------------------- */
+.form { display: grid; gap: clamp(16px, 2vw, 22px); max-width: 620px; }
+.field { display: grid; gap: .5em; }
+.field label { font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; color: var(--on-paper-soft); }
+.field input, .field textarea, .field select {
+  font: inherit;
+  color: var(--on-paper);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--hair-paper);
+  padding: .7em 0;
+  border-radius: 0;
+  transition: border-color var(--t-fast) var(--ease);
+}
+.field textarea { resize: vertical; min-height: 120px; }
+.field input:focus, .field textarea:focus, .field select:focus { border-bottom-color: var(--accent); }
+.field input::placeholder, .field textarea::placeholder { color: rgb(18 17 16 / .5); }
+
+.form__status { font-size: .9rem; color: var(--on-paper-soft); }
+.form__status[data-state="error"] { color: var(--accent); }
+
+.coords { display: grid; gap: 1.1em; }
+.coords dt { font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--on-paper-soft); margin-bottom: .3em; }
+.coords dd { font-size: 1.05rem; }
+.coords a { border-bottom: 1px solid var(--hair-paper); padding-bottom: 2px; transition: border-color var(--t-fast) var(--ease); }
+.coords a:hover { border-bottom-color: var(--accent); }
+.coords .todo { color: var(--on-paper-soft); font-style: italic; font-size: .95rem; }
+
+/* --- Page contact : formulaire + coordonnées --------------------------- */
+.contact-grid {
+  display: grid;
+  gap: clamp(36px, 5vw, 72px);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+@media (min-width: 1000px) {
+  .contact-grid { grid-template-columns: minmax(0, 1.25fr) minmax(220px, .75fr); }
+}
+.coords code {
+  font-size: .86em;
+  padding: .15em .4em;
+  background: var(--paper-2);
+  border-radius: 3px;
+}

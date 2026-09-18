@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr" class="no-js">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Contact — My Sam</title>
+<meta name="description" content="Écrire à My Sam : entreprises, particuliers, associations, ou toute autre situation." />
+<meta name="theme-color" content="#121110" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Contact — My Sam" />
+<meta property="og:description" content="Écrire à My Sam : entreprises, particuliers, associations, ou toute autre situation." />
+<meta property="og:locale" content="fr_FR" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23121110'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23E29174'/%3E%3C/svg%3E" />
+<link rel="preload" href="assets/fonts/instrument-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="assets/fonts/instrument-serif-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="assets/css/fonts.css" />
+<link rel="stylesheet" href="assets/css/base.css" />
+<link rel="stylesheet" href="assets/css/page.css" />
+<script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
+</head>
+<body data-profile="contact">
+<script>document.body.classList.add('is-entering');</script>
+
+<a class="skip" href="#main">Aller au contenu</a>
+
+<header class="site-head">
+  <a class="wordmark" href="index.html" aria-label="My Sam, accueil">My Sam<i aria-hidden="true"></i></a>
+  <nav class="site-nav" id="site-menu" aria-label="Navigation principale">
+    <a href="entreprises.html" data-profile="entreprises">Entreprises</a>
+    <a href="particuliers.html" data-profile="particuliers">Particuliers</a>
+    <a href="associations.html" data-profile="associations">Associations</a>
+    <a class="cta" href="contact.html" aria-current="page">Contact</a>
+    <a class="nav-reset" href="index.html">Changer de profil</a>
+  </nav>
+  <button class="burger" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="Ouvrir le menu"><span></span></button>
+</header>
+
+<main id="main">
+  <section class="hero on-ink" style="--tone: var(--tone-neutre);">
+    <div class="hero__halo" aria-hidden="true"></div>
+    <div class="shell">
+      <p class="eyebrow hero__index"><span>04</span><i aria-hidden="true"></i>Contact</p>
+      <h1 class="display">Dites-nous d’où<br /><em>vous partez.</em></h1>
+      <p class="lede">Une question, un besoin qui n’entre dans aucune case, un projet à cadrer&nbsp;: quelques lignes suffisent pour commencer.</p>
+      <div class="hero__meta">
+        <span class="tag">Entreprises</span>
+        <span class="tag">Particuliers</span>
+        <span class="tag">Associations</span>
+        <span class="tag">Autre</span>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="shell spread">
+      <p class="eyebrow">Écrire à My Sam</p>
+      <div class="contact-grid">
+        <form class="form reveal" data-contact-form novalidate>
+          <div class="field">
+            <label for="f-profil">Vous êtes</label>
+            <select id="f-profil" name="profil" data-prefill-profile>
+              <option value="entreprise">Une entreprise</option>
+              <option value="particulier">Un particulier</option>
+              <option value="association">Une association ou une structure</option>
+              <option value="autre">Autre</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-nom">Nom</label>
+            <input id="f-nom" name="nom" type="text" autocomplete="name" placeholder="Votre nom" required />
+          </div>
+          <div class="field">
+            <label for="f-email">E-mail</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" placeholder="vous@exemple.fr" required />
+          </div>
+          <div class="field">
+            <label for="f-message">Votre situation</label>
+            <textarea id="f-message" name="message" placeholder="Où vous en êtes, ce que vous cherchez." required></textarea>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:16px 22px;align-items:center;">
+            <button class="btn" type="submit">Envoyer</button>
+            <p class="form__status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+
+        <dl class="coords reveal">
+          <div>
+            <dt>E-mail</dt>
+            <dd data-coord="email"></dd>
+          </div>
+          <div>
+            <dt>Téléphone</dt>
+            <dd data-coord="phone"></dd>
+          </div>
+          <div>
+            <dt>LinkedIn</dt>
+            <dd data-coord="linkedin"></dd>
+          </div>
+          <div>
+            <span class="provisional">Coordonnées à compléter</span>
+            <p class="note" style="margin-top:12px;">Renseignez-les une seule fois dans <code>assets/js/config.js</code>&nbsp;: elles s’affichent alors partout, et le formulaire s’active dès qu’un point de collecte est indiqué.</p>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <footer class="section section--tight on-ink">
+    <div class="shell">
+      <nav class="switch" aria-label="Changer d’univers">
+        <a class="switch__link" href="entreprises.html" data-profile="entreprises">Entreprises <small>01</small></a>
+        <a class="switch__link" href="particuliers.html" data-profile="particuliers">Particuliers <small>02</small></a>
+        <a class="switch__link" href="associations.html" data-profile="associations">Associations <small>03</small></a>
+      </nav>
+
+      <div class="site-foot">
+        <div class="site-foot__grid">
+          <div>
+            <a class="wordmark" href="index.html">My Sam<i aria-hidden="true"></i></a>
+            <p class="note" style="color:var(--on-ink-soft);margin-top:.8em;max-width:32ch;">
+              Cabinet de conseil et de service.<br />L’entraide à portée de main.
+            </p>
+          </div>
+          <div>
+            <h4>Univers</h4>
+            <ul>
+              <li><a href="entreprises.html" data-profile="entreprises">Entreprises</a></li>
+              <li><a href="particuliers.html" data-profile="particuliers">Particuliers</a></li>
+              <li><a href="associations.html" data-profile="associations">Associations</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Aller plus loin</h4>
+            <ul>
+              <li><a href="ressources/modele-cv-annote.html">Modèle de CV annoté</a></li>
+              <li><a href="contact.html">Nous écrire</a></li>
+              <li><a href="index.html">Revenir au choix du profil</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="site-foot__base">
+          <span>© 2026 My&nbsp;Sam</span>
+          <span>Mentions légales &amp; politique de confidentialité — à rédiger</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+</main>
+
+<div class="wipe" aria-hidden="true"></div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/site.js"></script>
+</body>
+</html>
